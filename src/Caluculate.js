@@ -84,20 +84,10 @@ class Caluculate extends Component {
     // })
   }
 
- 
-
   transmitOpe = (val) => {
     this.setState(prevState => {
       return {
         operator: val
-      }
-    })
-  }
-
-  transmitOpe2 = () => {
-    this.setState(prevState => {
-      return {
-        operator: this.props.arr[11]
       }
     })
   }
@@ -151,22 +141,6 @@ class Caluculate extends Component {
                   key={val.toString()} className="App-num">
                   {val}</li>
               })}
-            {/* <li className="App-num" onClick={this.transmit1}>{this.props.arr[0]}</li>
-            <li className="App-num" onClick={this.transmit2}>{this.props.arr[1]}</li>
-            <li className="App-num" onClick={this.transmit3} >{this.props.arr[2]}</li>
-            <li className="App-num" onClick={this.transmit4} >{this.props.arr[3]}</li>
-            <li className="App-num" onClick={this.transmit5}>{this.props.arr[4]}</li>
-            <li className="App-num" onClick={this.transmit6}>{this.props.arr[5]}</li>
-            <li className="App-num" onClick={this.transmit7}>{this.props.arr[6]}</li>
-            <li className="App-num" onClick={this.transmit8}>{this.props.arr[7]}</li>
-            <li className="App-num" onClick={this.transmit9}>{this.props.arr[8]}</li>
-            <li className="App-num" onClick={this.transmit10}>{this.props.arr[9]}</li>
-            <li className="App-operator" onClick={this.transmitOpe1}>{this.props.arr[10]}</li>
-            <li className="App-operator" onClick={this.transmitOpe2}>{this.props.arr[11]}</li>
-            <li className="App-operator" onClick={this.transmitOpe3}>{this.props.arr[12]}</li>
-            <li className="App-operator" onClick={this.transmitOpe4}>{this.props.arr[13]}</li>
-            <li className="App-operator" onClick={this.makeZero}>{this.props.arr[14]}</li>
-            <li className="App-operator" onClick={this.calculateClick}>{this.props.arr[15]}</li> */}
           </ul>
         </main>
       </div>

@@ -224,7 +224,6 @@ class Caluculate extends Component {
         res: ''
       }
     });
-    console.log(this.state);
   }
 
 //"." 小数点事件
@@ -237,6 +236,7 @@ class Caluculate extends Component {
          }
        })
      }
+
      if (this.state.status === 's') {
        this.setState(prevState => {
          return {

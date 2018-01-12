@@ -15,7 +15,8 @@ class Caluculate extends Component {
       dot: '.'
     };
   }
-// "="
+
+// "=" 等于号事件"
   calculateClick = () => {
    
     this.setState(prevState => {
@@ -56,7 +57,7 @@ class Caluculate extends Component {
     });
   }
 
-// "1234567890"
+// "1234567890" 数字标签的事件
   transmit = (i) => {
     if (this.state.status === 'init') {
       this.setState((prevState) => {
@@ -115,27 +116,9 @@ class Caluculate extends Component {
         }
       })
     }
-    // this.setState(prevState => {
-    //   if (prevState.prevNum) {
-    //     if (prevState.postNum) {
-    //       return;
-    //     } else {
-    //       return {
-    //         postNum: count>0 ? prevState.postNum+' '+i : i
-    //       }
-    //     }
-    //   } else {
-    //     return {
-    //       prevNum: count>0 ?  prevState.prevNum+' '+i : i
-    //     }
-    //   }
-
-    // })
-    // count++;
-    // console.log(count);
   }
 
-// "+-*/"
+// "+-*/" 操作符事件
   transmitOpe = (val) => {
     if (this.state.status === 'f') {
       this.setState(prevState => {
@@ -155,11 +138,9 @@ class Caluculate extends Component {
         }
       })
     }
-
-
   }
 
-// "CE 清空"
+// "CE" 清空事件
   makeEmpty = () => {
     if (this.state.status === 'p') {
       this.setState(prevState => {
@@ -203,7 +184,7 @@ class Caluculate extends Component {
    }
  }
 
-// "撤退 ←"
+// "←" 撤退事件
   revocation = () => {
     console.log(this.state.status);
     if (this.state.status === 'p') {
@@ -231,7 +212,7 @@ class Caluculate extends Component {
     }
   }
 
-// "归零 C"
+// "C" 归零事件 
   makeZero = () => {
     this.setState(prevState => {
       return {
@@ -246,7 +227,7 @@ class Caluculate extends Component {
     console.log(this.state);
   }
 
-//小数点
+//"." 小数点事件
    addDot = (i) => {
      if (this.state.status === 'p') {
        this.setState(prevState => {
@@ -276,7 +257,7 @@ class Caluculate extends Component {
    
    }
 
-//负数 正数
+//"±" 正负符号事件
    addSymbol =() => {
      if (this.state.status === 'p') {
        this.setState(prevState => {
@@ -339,10 +320,11 @@ class Caluculate extends Component {
               (val, i) => {
                 return <li
                   onClick={() => {
+                    //数字的事件
                     if (typeof val === 'number') {
                       this.transmit(val);
                     }
-
+                    //操作符的事件
                     if (typeof val === 'string') {
                       if (val === 'C') {
                         this.makeZero();

@@ -9,42 +9,42 @@ class Caluculate extends Component {
       prev: '',
       oo: '',
       post: '',
-      value: '', 
+      value: '',
       status: 'init',
       res: '',
       dot: '.'
     };
   }
-
+// "="
   calculateClick = () => {
-    alert(this.state.status);
+   
     this.setState(prevState => {
       switch (prevState.oo) {
         case "+":
           return {
-            value: prevState.prev+ prevState.post,
-            res: prevState.prev+ prevState.post,
+            value: Number(prevState.prev) + Number(prevState.post),
+            res: Number(prevState.prev) + Number(prevState.post),
             status: 'f',
           }
           break;
         case "-":
           return {
-            value: prevState.prev - prevState.post,
-            res: prevState.prev+ prevState.post,
+            value: Number(prevState.prev) - Number(prevState.post),
+            res: Number(prevState.prev) - Number(prevState.post),
             status: 'f',
           }
           break;
         case "×":
           return {
-            value: prevState.prev * prevState.post,
-            res: prevState.prev+ prevState.post,
+            value: Number(prevState.prev) * Number(prevState.post),
+            res: Number(prevState.prev) * Number(prevState.post),
             status: 'f',
           }
           break;
-        case "%":
+        case "÷":
           return {
-            value: prevState.prev % prevState.post,
-            res: prevState.prev+ prevState.post,
+            value: Number(prevState.prev) / Number(prevState.post),
+            res: Number(prevState.prev) / Number(prevState.post),
             status: 'f',
           }
           break;
@@ -56,8 +56,9 @@ class Caluculate extends Component {
     });
   }
 
+// "1234567890"
   transmit = (i) => {
-    if (this.state.status === 'init'){
+    if (this.state.status === 'init') {
       this.setState((prevState) => {
         return {
           prev: i,
@@ -75,7 +76,7 @@ class Caluculate extends Component {
       })
     }
     if (this.state.status === 'o') {
-      this.setState( prevState => {
+      this.setState(prevState => {
         return {
           post: i,
           status: 's'
@@ -84,13 +85,36 @@ class Caluculate extends Component {
     }
 
     if (this.state.status === 's') {
-      this.setState( prevState => {
+      this.setState(prevState => {
         return {
-          post: prevState.post *10 + i
+          post: prevState.post * 10 + i
         }
       })
     }
 
+    if (this.state.status === 'f') {
+      this.setState(prevState => {
+        return {
+          post: prevState.post * 10 + i
+        }
+      })
+    }
+
+    if (this.state.status === 'd1') {
+      this.setState(prevState => {
+        return {
+          prev: prevState.prev + i,
+        }
+      })
+    }
+
+    if (this.state.status === 'd2') {
+      this.setState(prevState => {
+        return {
+          post: prevState.post + i,
+        }
+      })
+    }
     // this.setState(prevState => {
     //   if (prevState.prevNum) {
     //     if (prevState.postNum) {
@@ -111,33 +135,103 @@ class Caluculate extends Component {
     // console.log(count);
   }
 
+// "+-*/"
   transmitOpe = (val) => {
-    this.setState(prevState => {
-      return {
-        oo: val,
-        status: 'o'
-      }
-    })
+    if (this.state.status === 'f') {
+      this.setState(prevState => {
+        return {
+          prev: prevState.res,
+          oo: val,
+          post: '',
+          value: '',
+          status: 'f'
+        }
+      })
+    } else {
+      this.setState(prevState => {
+        return {
+          oo: val,
+          status: 'o'
+        }
+      })
+    }
+
+
   }
 
+// "CE 清空"
+  makeEmpty = () => {
+    if (this.state.status === 'p') {
+      this.setState(prevState => {
+        return {
+          prev: ''
+        }
+      })
+    }
+
+    if (this.state.status === 's') {
+      this.setState(prevState => {
+        return {
+          post: ''
+        }
+      })
+    }
+
+    if (this.state.status === 'f') {
+      this.setState(prevState => {
+        return {
+          post: ''
+        }
+      })
+    }
+ 
+
+   if (this.state.status === 'd1') {
+     this.setState(prevState => {
+       return {
+         prev: ''
+       }
+     })
+   }
+
+   if (this.state.status === 'd2') {
+     this.setState(prevState => {
+       return {
+         post: ''
+       }
+     })
+   }
+ }
+
+// "撤退 ←"
   revocation = () => {
     console.log(this.state.status);
     if (this.state.status === 'p') {
-      this.setState( (prevState) => {
+      this.setState((prevState) => {
         return {
-          prev: Number.parseInt(prevState.prev /10) 
+          prev: Number.parseInt(prevState.prev / 10)
         }
       })
     }
-    
+
     if (this.state.status === 's') {
-      this.setState( (prevState) => {
+      this.setState((prevState) => {
         return {
-          post: Number.parseInt(prevState.post /10)
+          post: Number.parseInt(prevState.post / 10)
+        }
+      })
+    }
+
+    if (this.state.status === 'f') {
+      this.setState( prevState => {
+        return {
+          post: Number.parseInt(prevState.post /10 )
         }
       })
     }
   }
+
+// "归零 C"
   makeZero = () => {
     this.setState(prevState => {
       return {
@@ -152,6 +246,78 @@ class Caluculate extends Component {
     console.log(this.state);
   }
 
+//小数点
+   addDot = (i) => {
+     if (this.state.status === 'p') {
+       this.setState(prevState => {
+         return {
+           prev: prevState.prev + '.',
+           status: 'd1'
+         }
+       })
+     }
+     if (this.state.status === 's') {
+       this.setState(prevState => {
+         return {
+           post: prevState.post + '.',
+           status: 'd2'
+         }
+       })
+     }
+
+     if (this.state.status === 'f') {
+       this.setState(prevState => {
+         return {
+           post: prevState.post + '.',
+           status: 'd2'
+         }
+       })
+     }
+   
+   }
+
+//负数 正数
+   addSymbol =() => {
+     if (this.state.status === 'p') {
+       this.setState(prevState => {
+         return {
+           prev: -prevState.prev
+         }
+       })
+     }
+
+     if (this.state.status === 's') {
+       this.setState(prevState => {
+         return {
+           post: -prevState.post
+         }
+       })
+     }
+
+     if (this.state.status === 'f') {
+       this.setState(prevState => {
+         return {
+           post: -prevState.post
+         }
+       })
+     }
+
+     if (this.state.status === 'd1') {
+       this.setState(prevState => {
+         return {
+           prev: -prevState.prev
+         }
+       })
+     }
+
+     if (this.state.status === 'd2') {
+       this.setState(prevState => {
+         return {
+           post: -prevState.post
+         }
+       })
+     }
+   }
   render() {
     const { prev, oo, post, value } = this.state;
     return (
@@ -169,20 +335,27 @@ class Caluculate extends Component {
             </div>
           </div>
           <ul className="App-number">
-            {['CE', 'C', '←', '÷', 7, 8, 9, '×', 4, 5, 6, '+', 1, 2, 3, '-', ' ±', 0, '.', '='].map(
+            {['CE', 'C', '←', '÷', 7, 8, 9, '×', 4, 5, 6, '+', 1, 2, 3, '-', '±', 0, '.', '='].map(
               (val, i) => {
                 return <li
                   onClick={() => {
                     if (typeof val === 'number') {
-                      this.transmit(val)
+                      this.transmit(val);
                     }
+
                     if (typeof val === 'string') {
                       if (val === 'C') {
-                        this.makeZero()
+                        this.makeZero();
                       } else if (val === '=') {
                         this.calculateClick();
-                      } else if (val === '←'){
-                        this.revocation()
+                      } else if (val === '←') {
+                        this.revocation();
+                      } else if (val ===  'CE'){
+                        this.makeEmpty();
+                      } else if (val === '.'){
+                        this.addDot();
+                      } else if (val === '±'){
+                        this.addSymbol();
                       }else {
                         this.transmitOpe(val);
                       }

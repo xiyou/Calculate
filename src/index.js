@@ -9,7 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 
 ReactDOM.render(
-    <Caluculate arr={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '+', '-', '×', '%','C','=']} />,
+    <Caluculate  />,
     document.getElementById('root')
 );
 registerServiceWorker();

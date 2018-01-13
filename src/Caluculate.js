@@ -12,13 +12,14 @@ class Caluculate extends Component {
       value: '',
       status: 'init',
       res: '',
-      dot: '.'
+      dot: '.',
+      round: false
     };
   }
 
-// "=" 等于号事件"
+  // "=" 等于号事件"
   calculateClick = () => {
-   
+
     this.setState(prevState => {
       switch (prevState.oo) {
         case "+":
@@ -44,7 +45,7 @@ class Caluculate extends Component {
           break;
         case "÷":
           return {
-            value: Number(prevState.prev) / Number(prevState.post),
+            value: prevState.post ? Number(prevState.prev) / Number(prevState.post) : '小子，除数不能为零',
             res: Number(prevState.prev) / Number(prevState.post),
             status: 'f',
           }
@@ -57,7 +58,7 @@ class Caluculate extends Component {
     });
   }
 
-// "1234567890" 数字标签的事件
+  // "1234567890" 数字标签的事件
   transmit = (i) => {
     if (this.state.status === 'init') {
       this.setState((prevState) => {
@@ -76,6 +77,7 @@ class Caluculate extends Component {
         }
       })
     }
+
     if (this.state.status === 'o') {
       this.setState(prevState => {
         return {
@@ -94,11 +96,28 @@ class Caluculate extends Component {
     }
 
     if (this.state.status === 'f') {
-      this.setState(prevState => {
-        return {
-          post: prevState.post * 10 + i
-        }
-      })
+
+      if (this.state.round === false) {
+        alert(this.state.status);
+        this.setState(prevState => {
+          return {
+            prev: i,
+            oo: '',
+            post: '',
+            value: '',
+            status: 'p',
+            round: true
+          }
+        })
+      } else {
+        this.setState(prevState => {
+          return {
+            post: prevState.post * 10 + i
+          }
+        })
+      }
+
+
     }
 
     if (this.state.status === 'd1') {
@@ -118,8 +137,62 @@ class Caluculate extends Component {
     }
   }
 
-// "+-*/" 操作符事件
+  // "+-*/" 操作符事件
   transmitOpe = (val) => {
+    // switch(val) {
+    //   case "×":
+    //     this.setState(prevState => {
+    //         return {
+    //           prev: prevState.prev * prevState.post,
+    //           oo: '',
+    //           post: ''
+    //         }
+    //     })
+    //     break;
+    //   case "-":
+    //     break;
+    //   default:
+    //     return;
+    // }
+    if (this.state.status === 's') {
+      switch (val) {
+        case '×':
+          this.setState(prevState => {
+            return {
+              prev: prevState.prev * prevState.post,
+              post: '',
+            }
+          });
+          break;
+        case '÷':
+          this.setState(prevState => {
+            return {
+              prev: prevState.prev / prevState.post,
+              post: ''
+            }
+          });
+          break;
+        case '+':
+          this.setState(prevState => {
+            return {
+              prev: prevState.prev + prevState.post,
+              post: ''
+            }
+          });
+          break;
+        case '-':
+          this.setState(prevState => {
+            return {
+              prev: prevState.prev - prevState.post,
+              post: ''
+            }
+          })
+          break;
+        default:
+          return "约吗"
+      }
+    }
+
     if (this.state.status === 'f') {
       this.setState(prevState => {
         return {
@@ -127,7 +200,7 @@ class Caluculate extends Component {
           oo: val,
           post: '',
           value: '',
-          status: 'f'
+          status: 'f',
         }
       })
     } else {
@@ -140,7 +213,7 @@ class Caluculate extends Component {
     }
   }
 
-// "CE" 清空事件
+  // "CE" 清空事件
   makeEmpty = () => {
     if (this.state.status === 'p') {
       this.setState(prevState => {
@@ -165,26 +238,26 @@ class Caluculate extends Component {
         }
       })
     }
- 
 
-   if (this.state.status === 'd1') {
-     this.setState(prevState => {
-       return {
-         prev: ''
-       }
-     })
-   }
 
-   if (this.state.status === 'd2') {
-     this.setState(prevState => {
-       return {
-         post: ''
-       }
-     })
-   }
- }
+    if (this.state.status === 'd1') {
+      this.setState(prevState => {
+        return {
+          prev: ''
+        }
+      })
+    }
 
-// "←" 撤退事件
+    if (this.state.status === 'd2') {
+      this.setState(prevState => {
+        return {
+          post: ''
+        }
+      })
+    }
+  }
+
+  // "←" 撤退事件
   revocation = () => {
     console.log(this.state.status);
     if (this.state.status === 'p') {
@@ -204,15 +277,15 @@ class Caluculate extends Component {
     }
 
     if (this.state.status === 'f') {
-      this.setState( prevState => {
+      this.setState(prevState => {
         return {
-          post: Number.parseInt(prevState.post /10 )
+          post: Number.parseInt(prevState.post / 10)
         }
       })
     }
   }
 
-// "C" 归零事件 
+  // "C" 归零事件 
   makeZero = () => {
     this.setState(prevState => {
       return {
@@ -226,79 +299,79 @@ class Caluculate extends Component {
     });
   }
 
-//"." 小数点事件
-   addDot = (i) => {
-     if (this.state.status === 'p') {
-       this.setState(prevState => {
-         return {
-           prev: prevState.prev + '.',
-           status: 'd1'
-         }
-       })
-     }
+  //"." 小数点事件
+  addDot = (i) => {
+    if (this.state.status === 'p') {
+      this.setState(prevState => {
+        return {
+          prev: prevState.prev + '.',
+          status: 'd1'
+        }
+      })
+    }
 
-     if (this.state.status === 's') {
-       this.setState(prevState => {
-         return {
-           post: prevState.post + '.',
-           status: 'd2'
-         }
-       })
-     }
+    if (this.state.status === 's') {
+      this.setState(prevState => {
+        return {
+          post: prevState.post + '.',
+          status: 'd2'
+        }
+      })
+    }
 
-     if (this.state.status === 'f') {
-       this.setState(prevState => {
-         return {
-           post: prevState.post + '.',
-           status: 'd2'
-         }
-       })
-     }
-   
-   }
+    if (this.state.status === 'f') {
+      this.setState(prevState => {
+        return {
+          post: prevState.post + '.',
+          status: 'd2'
+        }
+      })
+    }
 
-//"±" 正负符号事件
-   addSymbol =() => {
-     if (this.state.status === 'p') {
-       this.setState(prevState => {
-         return {
-           prev: -prevState.prev
-         }
-       })
-     }
+  }
 
-     if (this.state.status === 's') {
-       this.setState(prevState => {
-         return {
-           post: -prevState.post
-         }
-       })
-     }
+  //"±" 正负符号事件
+  addSymbol = () => {
+    if (this.state.status === 'p') {
+      this.setState(prevState => {
+        return {
+          prev: -prevState.prev
+        }
+      })
+    }
 
-     if (this.state.status === 'f') {
-       this.setState(prevState => {
-         return {
-           post: -prevState.post
-         }
-       })
-     }
+    if (this.state.status === 's') {
+      this.setState(prevState => {
+        return {
+          post: -prevState.post
+        }
+      })
+    }
 
-     if (this.state.status === 'd1') {
-       this.setState(prevState => {
-         return {
-           prev: -prevState.prev
-         }
-       })
-     }
+    if (this.state.status === 'f') {
+      this.setState(prevState => {
+        return {
+          post: -prevState.post
+        }
+      })
+    }
 
-     if (this.state.status === 'd2') {
-       this.setState(prevState => {
-         return {
-           post: -prevState.post
-         }
-       })
-     }
-   }
+    if (this.state.status === 'd1') {
+      this.setState(prevState => {
+        return {
+          prev: -prevState.prev
+        }
+      })
+    }
+
+    if (this.state.status === 'd2') {
+      this.setState(prevState => {
+        return {
+          post: -prevState.post
+        }
+      })
+    }
+  }
   render() {
     const { prev, oo, post, value } = this.state;
     return (
@@ -332,13 +405,13 @@ class Caluculate extends Component {
                         this.calculateClick();
                       } else if (val === '←') {
                         this.revocation();
-                      } else if (val ===  'CE'){
+                      } else if (val === 'CE') {
                         this.makeEmpty();
-                      } else if (val === '.'){
+                      } else if (val === '.') {
                         this.addDot();
-                      } else if (val === '±'){
+                      } else if (val === '±') {
                         this.addSymbol();
-                      }else {
+                      } else {
                         this.transmitOpe(val);
                       }
                     }

@@ -201,7 +201,6 @@ class Caluculate extends Component {
     }
 
     if (this.state.status === 'f') {
-      
       this.setState(prevState => {
         return {
           prev: prevState.res,
@@ -212,16 +211,7 @@ class Caluculate extends Component {
           round: false
         }
       })
-    }else {
-      this.setState(prevState => {
-        return {
-          oo: val,
-          status: 'o',
-        }
-      })
     }
-
-
   }
 
   // "CE" 清空事件

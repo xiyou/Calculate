@@ -12,8 +12,6 @@ class Caluculate extends Component {
       value: '',
       status: 'init',
       res: '',
-      dot: '.',
-      round: false
     };
   }
 
@@ -60,6 +58,7 @@ class Caluculate extends Component {
 
   // "1234567890" 数字标签的事件
   transmit = (i) => {
+    console.log(this.state.status);
     if (this.state.status === 'init') {
       this.setState((prevState) => {
         return {
@@ -96,30 +95,22 @@ class Caluculate extends Component {
     }
 
     if (this.state.status === 'f') {
-
-      if (this.state.round === false) {
-        alert(this.state.status);
-        this.setState(prevState => {
-          return {
-            prev: i,
-            oo: '',
-            post: '',
-            value: '',
-            status: 'p',
-            round: true
-          }
-        })
-      } else {
-        this.setState(prevState => {
-          return {
-            post: prevState.post * 10 + i
-          }
-        })
-      }
-
-
+      console.log('执行到这里了吗？');
+      this.setState(prevState => {
+        return {
+          prev: i,
+          oo: '',
+          post: '',
+          value: '',
+          status: 'p',
+        }
+      })
     }
-
+    // this.setState(prevState => {
+    //   return {
+    //     post: prevState.post * 10 + i
+    //   }
+    // })
     if (this.state.status === 'd1') {
       this.setState(prevState => {
         return {
@@ -135,25 +126,36 @@ class Caluculate extends Component {
         }
       })
     }
+
+    if (this.state.status === 'd3') {
+      this.setState(prevState => {
+        return {
+          prev: prevState.prev + i,
+          status: 'p'
+        }
+      })
+    }
   }
 
   // "+-*/" 操作符事件
   transmitOpe = (val) => {
-    // switch(val) {
-    //   case "×":
-    //     this.setState(prevState => {
-    //         return {
-    //           prev: prevState.prev * prevState.post,
-    //           oo: '',
-    //           post: ''
-    //         }
-    //     })
-    //     break;
-    //   case "-":
-    //     break;
-    //   default:
-    //     return;
-    // }
+    if (this.state.status === 'p') {
+      this.setState(prevState => {
+        return {
+          oo: val,
+          status: 'o',
+        }
+      })
+    }
+
+    if (this.state.status === 'o') {
+      this.setState(prevState => {
+        return {
+          oo: val,
+          status: 'o'
+        }
+      })
+    }
     if (this.state.status === 's') {
       switch (val) {
         case '×':
@@ -189,28 +191,32 @@ class Caluculate extends Component {
           })
           break;
         default:
-          return "约吗"
+          return "来呀"
       }
     }
 
     if (this.state.status === 'f') {
+      
       this.setState(prevState => {
         return {
           prev: prevState.res,
           oo: val,
           post: '',
           value: '',
-          status: 'f',
+          status: 'o',
+          round: false
         }
       })
-    } else {
+    }else {
       this.setState(prevState => {
         return {
           oo: val,
-          status: 'o'
+          status: 'o',
         }
       })
     }
+
+
   }
 
   // "CE" 清空事件
@@ -301,10 +307,19 @@ class Caluculate extends Component {
 
   //"." 小数点事件
   addDot = (i) => {
+    if (this.state.status === 'init') {
+      this.setState(prevState => {
+        return {
+          prev: 0+'.',
+          status: 'd3',
+          res: 0+'.'
+        }
+      })
+    }
     if (this.state.status === 'p') {
       this.setState(prevState => {
         return {
-          prev: prevState.prev + '.',
+          prev:  prevState.prev + '.',
           status: 'd1'
         }
       })

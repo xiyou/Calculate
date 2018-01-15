@@ -17,43 +17,46 @@ class Caluculate extends Component {
 
   // "=" 等于号事件"
   calculateClick = () => {
-
-    this.setState(prevState => {
-      switch (prevState.oo) {
-        case "+":
-          return {
-            value: Number(prevState.prev) + Number(prevState.post),
-            res: Number(prevState.prev) + Number(prevState.post),
-            status: 'f',
-          }
-          break;
-        case "-":
-          return {
-            value: Number(prevState.prev) - Number(prevState.post),
-            res: Number(prevState.prev) - Number(prevState.post),
-            status: 'f',
-          }
-          break;
-        case "×":
-          return {
-            value: Number(prevState.prev) * Number(prevState.post),
-            res: Number(prevState.prev) * Number(prevState.post),
-            status: 'f',
-          }
-          break;
-        case "÷":
-          return {
-            value: prevState.post ? Number(prevState.prev) / Number(prevState.post) : '小子，除数不能为零',
-            res: Number(prevState.prev) / Number(prevState.post),
-            status: 'f',
-          }
-          break;
-        default:
-          return {
-            value: ''
-          }
-      }
-    });
+    if (this.state.status === 'o') {
+        console.log("啥也没有")
+    }else {
+      this.setState(prevState => {
+        switch (prevState.oo) {
+          case "+":
+            return {
+              value: Number(prevState.prev) + Number(prevState.post),
+              res: Number(prevState.prev) + Number(prevState.post),
+              status: 'f',
+            }
+            break;
+          case "-":
+            return {
+              value: Number(prevState.prev) - Number(prevState.post),
+              res: Number(prevState.prev) - Number(prevState.post),
+              status: 'f',
+            }
+            break;
+          case "×":
+            return {
+              value: Number(prevState.prev) * Number(prevState.post),
+              res: Number(prevState.prev) * Number(prevState.post),
+              status: 'f',
+            }
+            break;
+          case "÷":
+            return {
+              value: prevState.post ? Number(prevState.prev) / Number(prevState.post) : '小子，除数不能为零',
+              res: Number(prevState.prev) / Number(prevState.post),
+              status: 'f',
+            }
+            break;
+          default:
+            return {
+              value: ''
+            }
+        }
+      });
+    }
   }
 
   // "1234567890" 数字标签的事件
@@ -70,8 +73,9 @@ class Caluculate extends Component {
 
     if (this.state.status === 'p') {
       this.setState((prevState) => {
+        console.log(prevState.prev);
         return {
-          prev: prevState.prev * 10 + i,
+          prev: typeof prevState.prev == 'string' ? prevState.prev + i : (prevState.prev < 0  ? prevState.prev * 10 - i : prevState.prev * 10 + i),
           status: 'p',
         }
       })
@@ -89,7 +93,8 @@ class Caluculate extends Component {
     if (this.state.status === 's') {
       this.setState(prevState => {
         return {
-          post: prevState.post * 10 + i
+          post: typeof prevState.post == 'string' ? prevState.post + i : (prevState.post < 0 ? prevState.post * 10 - i : prevState.post * 10 + i),
+          status: 's'
         }
       })
     }
@@ -111,13 +116,13 @@ class Caluculate extends Component {
     //     post: prevState.post * 10 + i
     //   }
     // })
-    if (this.state.status === 'd1') {
-      this.setState(prevState => {
-        return {
-          prev: prevState.prev + i,
-        }
-      })
-    }
+    // if (this.state.status === 'd1') {
+    //   this.setState(prevState => {
+    //     return {
+    //       prev: prevState.prev + i,
+    //     }
+    //   })
+    // }
 
     if (this.state.status === 'd2') {
       this.setState(prevState => {
@@ -127,14 +132,14 @@ class Caluculate extends Component {
       })
     }
 
-    if (this.state.status === 'd3') {
-      this.setState(prevState => {
-        return {
-          prev: prevState.prev + i,
-          status: 'p'
-        }
-      })
-    }
+    // if (this.state.status === 'd3') {
+    //   this.setState(prevState => {
+    //     return {
+    //       prev: prevState.prev + i,
+    //       status: 'p'
+    //     }
+    //   })
+    // }
   }
 
   // "+-*/" 操作符事件
@@ -240,7 +245,7 @@ class Caluculate extends Component {
     if (this.state.status === 'f') {
       this.setState(prevState => {
         return {
-          post: ''
+          value: ''
         }
       })
     }
@@ -282,13 +287,13 @@ class Caluculate extends Component {
       })
     }
 
-    if (this.state.status === 'f') {
-      this.setState(prevState => {
-        return {
-          post: Number.parseInt(prevState.post / 10)
-        }
-      })
-    }
+    // if (this.state.status === 'f') {
+    //   this.setState(prevState => {
+    //     return {
+    //       post: Number.parseInt(prevState.post / 10)
+    //     }
+    //   })
+    // }
   }
 
   // "C" 归零事件 
@@ -311,16 +316,25 @@ class Caluculate extends Component {
       this.setState(prevState => {
         return {
           prev: 0+'.',
-          status: 'd3',
-          res: 0+'.'
+          status: 'p',
         }
       })
     }
     if (this.state.status === 'p') {
+      
       this.setState(prevState => {
         return {
           prev:  prevState.prev + '.',
-          status: 'd1'
+          status: 'p'
+        }
+      })
+    }
+
+    if (this.state.status === 'o') {
+      this.setState(prevState => {
+        return {
+          post: 0+'.',
+          status: 's'
         }
       })
     }
@@ -329,19 +343,18 @@ class Caluculate extends Component {
       this.setState(prevState => {
         return {
           post: prevState.post + '.',
-          status: 'd2'
+          status: 's'
         }
       })
     }
-
-    if (this.state.status === 'f') {
-      this.setState(prevState => {
-        return {
-          post: prevState.post + '.',
-          status: 'd2'
-        }
-      })
-    }
+    // if (this.state.status === 'f') {
+    //   this.setState(prevState => {
+    //     return {
+    //       post: prevState.post + '.',
+    //       status: 'd2'
+    //     }
+    //   })
+    // }
 
   }
 
@@ -363,7 +376,7 @@ class Caluculate extends Component {
       })
     }
 
-    if (this.state.status === 'f') {
+    if (this.state.status === 'o') {
       this.setState(prevState => {
         return {
           post: -prevState.post
@@ -371,21 +384,21 @@ class Caluculate extends Component {
       })
     }
 
-    if (this.state.status === 'd1') {
-      this.setState(prevState => {
-        return {
-          prev: -prevState.prev
-        }
-      })
-    }
+    // if (this.state.status === 'd1') {
+    //   this.setState(prevState => {
+    //     return {
+    //       prev: -prevState.prev
+    //     }
+    //   })
+    // }
 
-    if (this.state.status === 'd2') {
-      this.setState(prevState => {
-        return {
-          post: -prevState.post
-        }
-      })
-    }
+    // if (this.state.status === 'd2') {
+    //   this.setState(prevState => {
+    //     return {
+    //       post: -prevState.post
+    //     }
+    //   })
+    // }
   }
   render() {
     const { prev, oo, post, value } = this.state;
